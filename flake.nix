@@ -41,12 +41,12 @@
       shellHook = ''
         echo python=${pkgs.python27}
         echo ncurses5=${pkgs.ncurses5}
-        echo sqlite=${pkgs.sqlite}
+        echo sqlite=${pkgs.sqlite.out}
         echo zlib=${pkgs.zlib}
         echo glibc=${pkgs.glibc}
         export PYTHON_SO=${pkgs.python27}
         export NCURSES_SO=${pkgs.ncurses5}
-        export SQLITE_SO=${pkgs.sqlite}
+        export SQLITE_SO=${pkgs.sqlite.out}
         export ZLIB_SO=${pkgs.zlib}
         export GLIBC_SO=${pkgs.glibc}
       '';
