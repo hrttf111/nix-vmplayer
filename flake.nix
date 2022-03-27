@@ -18,13 +18,17 @@
     #    cp -r ./* $out/
     #  '';
     #};
+    my-python-packages = python-packages: with python-packages; [
+      "binascii"
+    ];
+    python-with-my-packages = pkgs.python3.withPackages my-python-packages;
     vmware-player = pkgs.stdenv.mkDerivation rec {
       name = "vmware-player";
       version = "0.1";
       src = ./.;
       #tarfile = tar;
       #tarfile = vmp-source;
-      buildInputs = with pkgs; [ ncurses5 python27 sqlite patchelf zlib ];
+      buildInputs = with pkgs; [ ncurses5 python3 python27 sqlite patchelf zlib python-with-my-packages hexedit ];
 
       builder = ./builder.sh;
 
