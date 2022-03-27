@@ -1,4 +1,5 @@
 import struct
+import os
 from binascii import crc32
 
 MAGIC_NUMBER     = 0x36158611
@@ -63,6 +64,8 @@ with open("launcher.sh", 'wb') as launcher_file:
     source.seek(0, 0)
     launcher = source.read(launcherSize)
     launcher_file.write(launcher)
+
+os.system('./patch_launcher.sh')
 
 with open("data", 'wb') as data_file:
     source.seek(payloadOffset, 0)
