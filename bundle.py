@@ -65,8 +65,6 @@ with open("launcher.sh", 'wb') as launcher_file:
     launcher = source.read(launcherSize)
     launcher_file.write(launcher)
 
-os.system('./patch_launcher.sh')
-
 with open("data", 'wb') as data_file:
     source.seek(payloadOffset, 0)
     to_read = file_size - presize - FOOTER_SIZE
@@ -78,3 +76,29 @@ with open("footer", 'wb') as footer_file:
         dataSize, dataOffset, manifestSize, manifestOffset, payloadSize, payloadOffset, \
         launcherSize, presize, preoffset, version, checksum, magicNumber)
     footer_file.write(footer)
+
+os.system('./patch_launcher.sh')
+launcher_patched_file = open("launcher_patched.sh", 'rb')
+launcher_patched = launcher_patched_file.read(-1)
+launcher_patched_size = launcher_patched_file.tell()
+
+new_file_path = FILE_PATH + ".patched"
+with open(new_file_path, 'wb') as new_file:
+    new_file.write(launcher_patched)
+    source.seek(payloadOffset, 0)
+    to_read = file_size - presize - FOOTER_SIZE
+    data = source.read(to_read)
+    new_file.write(data)
+    preoffset = launcher_patched_size
+    launcherSize = launcher_patched_size
+    payloadOffset = launcher_patched_size
+    manifestOffset = payloadOffset + payloadSize
+    dataOffset = manifestOffset + manifestSize
+    new_footer = struct.pack(FOOTER_FORMAT, \
+        dataSize, dataOffset, manifestSize, manifestOffset, payloadSize, payloadOffset, \
+        launcherSize, presize, preoffset, version, checksum, magicNumber)
+    checksum = CalculateChecksum(new_footer[0:-8])
+    new_footer = struct.pack(FOOTER_FORMAT, \
+        dataSize, dataOffset, manifestSize, manifestOffset, payloadSize, payloadOffset, \
+        launcherSize, presize, preoffset, version, checksum, magicNumber)
+    new_file.write(new_footer)
