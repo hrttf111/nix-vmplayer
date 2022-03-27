@@ -43,6 +43,12 @@
         echo ncurses5=${pkgs.ncurses5}
         echo sqlite=${pkgs.sqlite}
         echo zlib=${pkgs.zlib}
+        echo glibc=${pkgs.glibc}
+        export PYTHON_SO=${pkgs.python27}
+        export NCURSES_SO=${pkgs.ncurses5}
+        export SQLITE_SO=${pkgs.sqlite}
+        export ZLIB_SO=${pkgs.zlib}
+        export GLIBC_SO=${pkgs.glibc}
       '';
     };
   in
