@@ -10,7 +10,7 @@ def CalculateChecksum(header):
     return crc32(header) & 0xffffffff # XXX: Python bug 1202
 
 FILE_PATH = "/home/ddd/VMware-Player-12.5.9-7535481.x86_64.bundle"
-FILE_PATH = "/home/ddd/VMware-Player-14.1.1-7528167.x86_64.bundle"
+#FILE_PATH = "/home/ddd/VMware-Player-14.1.1-7528167.x86_64.bundle"
 
 source = open(FILE_PATH, 'rb')
 

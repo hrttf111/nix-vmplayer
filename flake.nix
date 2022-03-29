@@ -30,7 +30,7 @@
       #tarfile = vmp-source;
       buildInputs = with pkgs; [ ncurses5 python3 python27 sqlite patchelf zlib python-with-my-packages hexedit ];
 
-      builder = ./builder.sh;
+      #builder = ./builder.sh;
 
       configurePhase = ''
       '';
