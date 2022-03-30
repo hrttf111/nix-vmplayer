@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  ftp:
+    container_name: ftp
+    image: docker.io/panubo/vsftpd:latest
+    #ports: ["21:21", "4559-4564:4559-4564"]
+    privileged: false
+    volumes:
+      - "/tmp:/srv"
+    environment:
+      FTP_USER: ftp
+      FTP_PASSWORD: ftp
+
+  web:
+    container_name: web
+    image: nginx:stable-alpine
+    ports: ["80:80"]
+    privileged: false
+    volumes:
+      - "/tmp:/usr/share/nginx/html:ro"
+      - "./default.conf:/etc/nginx/conf.d/default.conf:ro"
