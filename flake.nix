@@ -35,6 +35,7 @@
 #      };
 
       buildInputs = with pkgs; [ bash ncurses5 python3 python27 sqlite patchelf zlib python-with-my-packages hexedit ];
+      patchedBundle = "${nname}.patched";
 
       configurePhase = ''
       '';
@@ -53,15 +54,18 @@
         python3 $src/bundle.py ${bundle} "$patchedBundle.patched"
         mkdir res
         chmod +x $patchedBundle.patched
-        patchShebangs $patchedBundle.patched
+        #patchShebangs $patchedBundle.patched
         echo "Patch done"
-        $patchedBundle.patched -x res
+        #$patchedBundle.patched -x res
         echo "Done"
       '';
 
       installPhase = ''
-        mkdir out
-        cp -r res/* out/
+        mkdir $out
+        ls -lah ./
+        ls -lah ./${patchedBundle}
+        cp ./${patchedBundle} $out/
+        #cp -r res/* $out/
       '';
     };
     #bundle = pkgs.stdenv.mkDerivation {
