@@ -1,4 +1,5 @@
 import struct
+import sys
 import os
 from binascii import crc32
 
@@ -9,8 +10,10 @@ FOOTER_SIZE      = struct.calcsize(FOOTER_FORMAT)
 def CalculateChecksum(header):
     return crc32(header) & 0xffffffff # XXX: Python bug 1202
 
-FILE_PATH = "/home/ddd/VMware-Player-12.5.9-7535481.x86_64.bundle"
-#FILE_PATH = "/home/ddd/VMware-Player-14.1.1-7528167.x86_64.bundle"
+FILE_PATH = sys.argv[1]
+DEST_PATH = sys.argv[2]
+
+print(f"Input={FILE_PATH} Output={DEST_PATH}")
 
 source = open(FILE_PATH, 'rb')
 
@@ -83,7 +86,7 @@ launcher_patched_file = open("launcher_patched.sh", 'rb')
 launcher_patched = launcher_patched_file.read(-1)
 launcher_patched_size = launcher_patched_file.tell()
 
-new_file_path = FILE_PATH + ".patched"
+new_file_path = DEST_PATH
 with open(new_file_path, 'wb') as new_file:
     new_file.write(launcher_patched)
     source.seek(payloadOffset, 0)

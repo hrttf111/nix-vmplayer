@@ -12,6 +12,8 @@ cat >> launcher_patched.sh <<- EOM
       patchelf --replace-needed libsqlite3.so.0 ${SQLITE_SO}/lib/libsqlite3.so.0  \$so
       patchelf --replace-needed libz.so.1 ${ZLIB_SO}/lib/libz.so.1  \$so
    done
+   echo "Patch shebang"
+   patchShebangs \$VMIS_TEMP
    echo "Patch done"
 EOM
 cat xx01 >> launcher_patched.sh
