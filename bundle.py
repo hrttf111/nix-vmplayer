@@ -106,3 +106,21 @@ with open(new_file_path, 'wb') as new_file:
         dataSize, dataOffset, manifestSize, manifestOffset, payloadSize, payloadOffset, \
         launcherSize, presize, preoffset, version, checksum, magicNumber)
     new_file.write(new_footer)
+    text2 = f"""
+        magicNumber = {magicNumber}
+        checksum = {checksum}
+        version = {version}
+        preoffset = {preoffset}
+        presize = {presize}
+        launcherSize = {launcherSize}
+        payloadOffset = {payloadOffset}
+        payloadSize = {payloadSize}
+        manifestOffset = {manifestOffset}
+        manifestSize = {manifestSize}
+        dataOffset = {dataOffset}
+        dataSize = {dataSize}
+
+        payloadOffset + payloadSize = {payloadOffset + payloadSize}
+        manifestOffset + manifestSize = {manifestOffset + manifestSize}
+    """
+    print(text2)
