@@ -85,6 +85,8 @@
           "$pkgdir/usr/share"/{doc/vmware-vix,licenses/"$pkgname"} \
           "$pkgdir/var/lib/vmware/Shared VMs"
 
+        #install -Dm 644 vmware-installer/bootstrap "$out"/etc/vmware-installer/bootstrap
+
         chmod +w -R $pkgdir/*
         chmod +w -R $bundleSource
 
@@ -199,6 +201,9 @@
 #        local iso_version=$(cat vmware-tools-$isoimage/manifest.xml | grep -oPm1 "(?<=<version>)[^<]+")
           sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES(\"vmware-tools-$isoimage\",\"$iso_version\",\"${version}\",1,\"$isoimage\",\"$isoimage\",1);"
         done
+
+        install -m644 $src/vmware-config-bootstrap "$out"/etc/vmware/bootstrap
+        install -Dm 644 $src/vmware-config "$out"/etc/vmware/config
       '';
 
     };
