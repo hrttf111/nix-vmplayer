@@ -172,7 +172,7 @@
           vmware-vmblock-fuse \
           vmware-zenity
         do
-          ln -s /usr/lib/vmware/bin/appLoader "$pkgdir/usr/lib/vmware/bin/$link"
+          ln -s $pkgdir/usr/lib/vmware/bin/appLoader "$pkgdir/usr/lib/vmware/bin/$link"
         done
 
         for file in \
