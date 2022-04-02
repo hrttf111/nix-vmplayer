@@ -3,33 +3,33 @@
 #
 # ModulesPath = /usr/lib/vmware/libconf/lib/pango/1.6.0/modules
 #
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-arabic-lang.so ArabicScriptEngineLang PangoEngineLang PangoRenderNone arabic:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-arabic-fc.so ArabicScriptEngineFc PangoEngineShape PangoRenderFc arabic:* nko:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-basic-fc.so BasicScriptEngineFc PangoEngineShape PangoRenderFc latin:* cyrillic:* greek:* armenian:* georgian:* runic:* ogham:* bopomofo:* cherokee:* coptic:* deseret:* ethiopic:* gothic:* han:* hiragana:* katakana:* old-italic:* canadian-aboriginal:* yi:* braille:* cypriot:* limbu:* osmanya:* shavian:* linear-b:* ugaritic:* glagolitic:* cuneiform:* phoenician:* common:
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-basic-x.so BasicScriptEngineX PangoEngineShape PangoRenderX common:
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-hangul-fc.so HangulScriptEngineFc PangoEngineShape PangoRenderFc hangul:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-hebrew-fc.so HebrewScriptEngineFc PangoEngineShape PangoRenderFc hebrew:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so devaScriptEngineFc PangoEngineShape PangoRenderFc devanagari:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so bengScriptEngineFc PangoEngineShape PangoRenderFc bengali:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so guruScriptEngineFc PangoEngineShape PangoRenderFc gurmukhi:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so gujrScriptEngineFc PangoEngineShape PangoRenderFc gujarati:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so oryaScriptEngineFc PangoEngineShape PangoRenderFc oriya:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so tamlScriptEngineFc PangoEngineShape PangoRenderFc tamil:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so teluScriptEngineFc PangoEngineShape PangoRenderFc telugu:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so kndaScriptEngineFc PangoEngineShape PangoRenderFc kannada:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so mlymScriptEngineFc PangoEngineShape PangoRenderFc malayalam:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so sinhScriptEngineFc PangoEngineShape PangoRenderFc sinhala:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so devaIndicScriptEngineLang PangoEngineLang PangoRenderNone devanagari:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so bengIndicScriptEngineLang PangoEngineLang PangoRenderNone bengali:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so guruIndicScriptEngineLang PangoEngineLang PangoRenderNone gurmukhi:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so gujrIndicScriptEngineLang PangoEngineLang PangoRenderNone gujarati:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so oryaIndicScriptEngineLang PangoEngineLang PangoRenderNone oriya:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so tamlIndicScriptEngineLang PangoEngineLang PangoRenderNone tamil:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so teluIndicScriptEngineLang PangoEngineLang PangoRenderNone telugu:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so kndaIndicScriptEngineLang PangoEngineLang PangoRenderNone kannada:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so mlymIndicScriptEngineLang PangoEngineLang PangoRenderNone malayalam:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so sinhIndicScriptEngineLang PangoEngineLang PangoRenderNone sinhala:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-khmer-fc.so KhmerScriptEngineFc PangoEngineShape PangoRenderFc khmer:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-syriac-fc.so SyriacScriptEngineFc PangoEngineShape PangoRenderFc syriac:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-thai-fc.so ThaiScriptEngineFc PangoEngineShape PangoRenderFc thai:* lao:*
-/nix/store/h19s8krx5qdpar88ix57rff69agfhr1g-vmware-vmx/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-tibetan-fc.so TibetanScriptEngineFc PangoEngineShape PangoRenderFc tibetan:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-arabic-lang.so ArabicScriptEngineLang PangoEngineLang PangoRenderNone arabic:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-arabic-fc.so ArabicScriptEngineFc PangoEngineShape PangoRenderFc arabic:* nko:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-basic-fc.so BasicScriptEngineFc PangoEngineShape PangoRenderFc latin:* cyrillic:* greek:* armenian:* georgian:* runic:* ogham:* bopomofo:* cherokee:* coptic:* deseret:* ethiopic:* gothic:* han:* hiragana:* katakana:* old-italic:* canadian-aboriginal:* yi:* braille:* cypriot:* limbu:* osmanya:* shavian:* linear-b:* ugaritic:* glagolitic:* cuneiform:* phoenician:* common:
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-basic-x.so BasicScriptEngineX PangoEngineShape PangoRenderX common:
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-hangul-fc.so HangulScriptEngineFc PangoEngineShape PangoRenderFc hangul:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-hebrew-fc.so HebrewScriptEngineFc PangoEngineShape PangoRenderFc hebrew:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so devaScriptEngineFc PangoEngineShape PangoRenderFc devanagari:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so bengScriptEngineFc PangoEngineShape PangoRenderFc bengali:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so guruScriptEngineFc PangoEngineShape PangoRenderFc gurmukhi:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so gujrScriptEngineFc PangoEngineShape PangoRenderFc gujarati:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so oryaScriptEngineFc PangoEngineShape PangoRenderFc oriya:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so tamlScriptEngineFc PangoEngineShape PangoRenderFc tamil:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so teluScriptEngineFc PangoEngineShape PangoRenderFc telugu:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so kndaScriptEngineFc PangoEngineShape PangoRenderFc kannada:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so mlymScriptEngineFc PangoEngineShape PangoRenderFc malayalam:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-fc.so sinhScriptEngineFc PangoEngineShape PangoRenderFc sinhala:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so devaIndicScriptEngineLang PangoEngineLang PangoRenderNone devanagari:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so bengIndicScriptEngineLang PangoEngineLang PangoRenderNone bengali:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so guruIndicScriptEngineLang PangoEngineLang PangoRenderNone gurmukhi:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so gujrIndicScriptEngineLang PangoEngineLang PangoRenderNone gujarati:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so oryaIndicScriptEngineLang PangoEngineLang PangoRenderNone oriya:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so tamlIndicScriptEngineLang PangoEngineLang PangoRenderNone tamil:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so teluIndicScriptEngineLang PangoEngineLang PangoRenderNone telugu:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so kndaIndicScriptEngineLang PangoEngineLang PangoRenderNone kannada:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so mlymIndicScriptEngineLang PangoEngineLang PangoRenderNone malayalam:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-indic-lang.so sinhIndicScriptEngineLang PangoEngineLang PangoRenderNone sinhala:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-khmer-fc.so KhmerScriptEngineFc PangoEngineShape PangoRenderFc khmer:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-syriac-fc.so SyriacScriptEngineFc PangoEngineShape PangoRenderFc syriac:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-thai-fc.so ThaiScriptEngineFc PangoEngineShape PangoRenderFc thai:* lao:*
+@@VMWARE_DIR@@/usr/lib/vmware/libconf/lib/pango/1.6.0/modules/pango-tibetan-fc.so TibetanScriptEngineFc PangoEngineShape PangoRenderFc tibetan:*
