@@ -1,0 +1,3 @@
+gtk-theme-name = "Clearlooks"
+
+include "Clearlooks.gtkrc"
