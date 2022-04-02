@@ -1,10 +1,15 @@
 {
   description = "vmware player try";
 
+  inputs = {
+    nixpkgs.url = "nixpkgs/nixos-21.11";
+  };
+
   outputs = { self, nixpkgs }:
   let
     pkgs = nixpkgs.legacyPackages.x86_64-linux.pkgs;
-    kernel = nixpkgs.legacyPackages.x86_64-linux.pkgs.linux;
+    kernel = nixpkgs.legacyPackages.x86_64-linux.pkgs.linux_5_15;
+    #kernel = nixpkgs.legacyPackages.x86_64-linux.pkgs.linuxPackages_5_15;
     nname = "VMware-Player-12.5.9-7535481.x86_64.bundle";
 
     my-python-packages = python-packages: with python-packages; [
@@ -66,32 +71,31 @@
       hardeningDisable = [ "all" ];
       buildInputs = with pkgs; [ gcc gnumake vmware-bundle tree patch ];
       nativeBuildInputs = kernel.moduleBuildDependencies;
-      makeFlags = [ "KERNEL_SRC=${kernel.dev}" "KERNEL_VER=${kernel.modDirVersion}" ];
+      makeFlags = [
+        "KVERSION=${kernel.modDirVersion}"
+        "LINUXINCLUDE=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include/"
+        "VM_KBUILD=yes"
+      ];
       #patches = [ ./vmmon.patch ];
 
       unpackPhase = ''
       '';
 
       buildPhase = ''
-        sourceRoot=$src
-        #tar xf "${vmware-bundle}/vmware-vmx/lib/modules/source/vmmon.tar" -C "$sourceRoot"
         tar xf "${vmware-bundle}/vmware-vmx/lib/modules/source/vmmon.tar"
         cp -r ./vmmon-only ./vmmon
         ${pkgs.patch}/bin/patch -p1 < $src/vmmon.patch
-        mv ./vmmon/* ./
-        ls ./
         export KVERSION=${kernel.modDirVersion}
         export LINUXINCLUDE=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include/
         export VM_KBUILD=yes
-        ls ./
-        make
+        make -C ./vmmon
       '';
 
       installPhase = ''
         tree $src
         binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/"
         mkdir -p $binDir
-        cp ./*.ko $binDir
+        cp ./vmmon/*.ko $binDir
       '';
 
       shellHook = ''
