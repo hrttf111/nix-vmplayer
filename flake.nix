@@ -4,8 +4,8 @@
   outputs = { self, nixpkgs }:
   let
     pkgs = nixpkgs.legacyPackages.x86_64-linux.pkgs;
+    kernel = nixpkgs.legacyPackages.x86_64-linux.pkgs.linux;
     nname = "VMware-Player-12.5.9-7535481.x86_64.bundle";
-    #nname = "VMware-Player-14.1.7-12989993.x86_64.bundle";
 
     my-python-packages = python-packages: with python-packages; [
       "binascii"
@@ -55,6 +55,49 @@
         cp ./launcher_patched.sh $out/
         cp ./result $out/
         cp -r res/* $out/
+      '';
+    };
+
+    vmware-kernel = pkgs.stdenv.mkDerivation rec {
+      name = "vmware-kernel";
+      version = "0.3";
+      src = ./.;
+
+      hardeningDisable = [ "all" ];
+      buildInputs = with pkgs; [ gcc gnumake vmware-bundle tree patch ];
+      nativeBuildInputs = kernel.moduleBuildDependencies;
+      makeFlags = [ "KERNEL_SRC=${kernel.dev}" "KERNEL_VER=${kernel.modDirVersion}" ];
+      #patches = [ ./vmmon.patch ];
+
+      unpackPhase = ''
+      '';
+
+      buildPhase = ''
+        sourceRoot=$src
+        #tar xf "${vmware-bundle}/vmware-vmx/lib/modules/source/vmmon.tar" -C "$sourceRoot"
+        tar xf "${vmware-bundle}/vmware-vmx/lib/modules/source/vmmon.tar"
+        cp -r ./vmmon-only ./vmmon
+        ${pkgs.patch}/bin/patch -p1 < $src/vmmon.patch
+        mv ./vmmon/* ./
+        ls ./
+        export KVERSION=${kernel.modDirVersion}
+        export LINUXINCLUDE=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include/
+        export VM_KBUILD=yes
+        ls ./
+        make
+      '';
+
+      installPhase = ''
+        tree $src
+        binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/"
+        mkdir -p $binDir
+        cp ./*.ko $binDir
+      '';
+
+      shellHook = ''
+        export KVERSION=${kernel.modDirVersion}
+        export LINUXINCLUDE=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include/
+        export VM_KBUILD=yes
       '';
     };
 
@@ -395,8 +438,8 @@
   {
     inherit vmware-player;
     overlay = final: prev: {
-      vmware-player = vmware-player;
+      vmware-player = vmware-kernel; #vmware-player;
     };
-    defaultPackage.x86_64-linux = vmware-player; 
+    defaultPackage.x86_64-linux = vmware-kernel; #vmware-player;
   };
 }
