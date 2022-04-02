@@ -9,7 +9,6 @@
   let
     pkgs = nixpkgs.legacyPackages.x86_64-linux.pkgs;
     kernel = nixpkgs.legacyPackages.x86_64-linux.pkgs.linux_5_15;
-    #kernel = nixpkgs.legacyPackages.x86_64-linux.pkgs.linuxPackages_5_15;
     nname = "VMware-Player-12.5.9-7535481.x86_64.bundle";
 
     my-python-packages = python-packages: with python-packages; [
@@ -396,50 +395,17 @@
 
     };
 
-    vmware-player = pkgs.stdenv.mkDerivation rec {
-      name = "vmware-player";
+    vmware-config = pkgs.stdenv.mkDerivation rec {
+      name = "vmware-config";
       version = "0.1";
-      src = ./.;
-      buildInputs = with pkgs; [ ncurses5 python3 python27 sqlite patchelf zlib python-with-my-packages hexedit vmware-bundle vmware-vmx vmware-kernel ];
-
-      configurePhase = ''
-      '';
-
-      installPhase = ''
-      '';
-
-      shellHook = ''
-        echo ${vmware-bundle}
-        echo ${vmware-vmx}
-        echo python=${pkgs.python27}
-        echo ncurses5=${pkgs.ncurses5}
-        echo sqlite=${pkgs.sqlite.out}
-        echo zlib=${pkgs.zlib}
-        echo glibc=${pkgs.glibc}
-        export PYTHON_SO=${pkgs.python27}
-        export NCURSES_SO=${pkgs.ncurses5}
-        export SQLITE_SO=${pkgs.sqlite.out}
-        export ZLIB_SO=${pkgs.zlib}
-        export GLIBC_SO=${pkgs.glibc}
-      '';
-    };
-
-    extra-config = pkgs.stdenv.mkDerivation rec {
-      name = "vmware-extra";
-      version = "0.1";
-      buildInputs = with pkgs; [ vmware-vmx ];
+      buildInputs = with pkgs; [ vmware-vmx vmware-kernel ];
 
       src = ./.;
 
       installPhase = ''
         set -x
         mkdir -p $out/{etc,home,root,usr,bin}
-        touch $out/etc/1
-        touch $out/home/1
-        touch $out/root/1
-        touch $out/usr/1
         ln -s ${vmware-vmx}/usr/lib/vmware/bin/vmplayer $out/bin/vmplayer
-        ln -s $out/etc/1 $out/bin/1
         mkdir $out/etc/vmware
         cp $src/vmware-config $out/etc/vmware/config
         cp $src/vmware-config-bootstrap $out/etc/vmware/bootstrap
@@ -456,6 +422,11 @@
         cp $src/local_conf/home/pango.modules $out/etc/
         cp $src/local_conf/home/pangorc $out/etc/pango/
         sed -i "s,@@VMWARE_DIR@@,$VMWARE_DIR," "$out/etc/pango.modules"
+        cp $src/local_conf/home/vmware/preferences $out/etc/vmware/preferences
+        echo 'mkdir ~/.vmware; cp /etc/vmware/preferences ~/.vmware/' > $out/bin/copy_pref
+        chmod +x $out/bin/copy_pref
+        echo "modprobe vmw_vmci; insmod ${vmware-kernel}/lib/modules/${kernel.modDirVersion}/kernel/vmmon.ko" > $out/bin/ins_mods
+        chmod +x $out/bin/ins_mods
       '';
     };
 
@@ -463,13 +434,15 @@
       name = "vmware-player-fhs";
 
       targetPkgs = pkgs: with self.pkgs; [
-        extra-config
+        vmware-config
         vmware-vmx
+        vmware-kernel
       ];
 
       profile = ''
         export VMWARE_VMX=${vmware-vmx}
-        export VMWARE_EXTRA=${extra-config}
+        export VMWARE_CONFIG=${vmware-config}
+        export VMWARE_KERNEL=${vmware-kernel}
       '';
 
       extraBuildCommands = ''
@@ -478,12 +451,11 @@
       extraInstallCommands = ''
       '';
 
-      #runScript = "${vmware-vmx}/bin/vmplayer";
       runScript = "bash -l";
     };
   in
   {
-    inherit vmware-player;
+    #inherit vmware-player;
     overlay = final: prev: {
       vmware-player = vmware-player-fhs;
     };
