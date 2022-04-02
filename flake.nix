@@ -358,8 +358,6 @@
           patchelf --replace-needed libxml2.so.2 ${placeholder "out"}/usr/lib/vmware/lib/libxml2.so.2/libxml2.so.2 $elf
           patchelf --replace-needed libXrandr.so.2 ${placeholder "out"}/usr/lib/vmware/lib/libXrandr.so.2/libXrandr.so.2 $elf
           patchelf --replace-needed libXrender.so.1 ${placeholder "out"}/usr/lib/vmware/lib/libXrender.so.1/libXrender.so.1 $elf
-
-          #ldd $elf
         }
 
         for i in `seq 0 3`; do
@@ -402,7 +400,7 @@
       name = "vmware-player";
       version = "0.1";
       src = ./.;
-      buildInputs = with pkgs; [ ncurses5 python3 python27 sqlite patchelf zlib python-with-my-packages hexedit vmware-bundle vmware-vmx ];
+      buildInputs = with pkgs; [ ncurses5 python3 python27 sqlite patchelf zlib python-with-my-packages hexedit vmware-bundle vmware-vmx vmware-kernel ];
 
       configurePhase = ''
       '';
@@ -426,24 +424,69 @@
       '';
     };
 
-    vmware-player-fhs = self.buildFHSUserEnv {
+    extra-config = pkgs.stdenv.mkDerivation rec {
+      name = "vmware-extra";
+      version = "0.1";
+      buildInputs = with pkgs; [ vmware-vmx ];
+
+      src = ./.;
+
+      installPhase = ''
+        set -x
+        mkdir -p $out/{etc,home,root,usr,bin}
+        touch $out/etc/1
+        touch $out/home/1
+        touch $out/root/1
+        touch $out/usr/1
+        ln -s ${vmware-vmx}/usr/lib/vmware/bin/vmplayer $out/bin/vmplayer
+        ln -s $out/etc/1 $out/bin/1
+        mkdir $out/etc/vmware
+        cp $src/vmware-config $out/etc/vmware/config
+        cp $src/vmware-config-bootstrap $out/etc/vmware/bootstrap
+        #VMWARE_DIR=${placeholder "out"}
+        VMWARE_DIR=${vmware-vmx}
+        sed -i "s,@@VMWARE_DIR@@,$VMWARE_DIR," "$out/etc/vmware/bootstrap"
+        sed -i "s,@@VMWARE_DIR@@,$VMWARE_DIR," "$out/etc/vmware/config"
+        mkdir $out/etc/gtk-2.0
+        cp $src/local_conf/etc/gtk-2.0/* $out/etc/gtk-2.0/
+        sed -i "s,@@VMWARE_DIR@@,$VMWARE_DIR," "$out/etc/gtk-2.0/gdk-pixbuf.loaders"
+        sed -i "s,@@VMWARE_DIR@@,$VMWARE_DIR," "$out/etc/gtk-2.0/gtk.immodules"
+        mkdir $out/etc/pango
+        cp $src/local_conf/home/pangox.aliases $out/etc/
+        cp $src/local_conf/home/pango.modules $out/etc/
+        cp $src/local_conf/home/pangorc $out/etc/pango/
+        sed -i "s,@@VMWARE_DIR@@,$VMWARE_DIR," "$out/etc/pango.modules"
+      '';
+    };
+
+    vmware-player-fhs = pkgs.buildFHSUserEnv {
       name = "vmware-player-fhs";
 
       targetPkgs = pkgs: with self.pkgs; [
-        fontconfig
-        libuuid
+        extra-config
         vmware-vmx
-        zlib
       ];
 
-      runScript = "${vmware-vmx}/bin/vmplayer";
+      profile = ''
+        export VMWARE_VMX=${vmware-vmx}
+        export VMWARE_EXTRA=${extra-config}
+      '';
+
+      extraBuildCommands = ''
+      '';
+
+      extraInstallCommands = ''
+      '';
+
+      #runScript = "${vmware-vmx}/bin/vmplayer";
+      runScript = "bash -l";
     };
   in
   {
     inherit vmware-player;
     overlay = final: prev: {
-      vmware-player = vmware-kernel; #vmware-player;
+      vmware-player = vmware-player-fhs;
     };
-    defaultPackage.x86_64-linux = vmware-kernel; #vmware-player;
+    defaultPackage.x86_64-linux = vmware-player-fhs;
   };
 }
