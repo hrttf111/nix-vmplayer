@@ -17,11 +17,14 @@ cat >> launcher_patched.sh <<- EOM
    #source $stdenv/setup
    source $(cat $stdenv/setup | grep "[^ ]*shebangs.sh" -o)
    echo "Patch ELF"
+   PYTHON_SO1=\$VMIS_TEMP/install/vmware-installer/python/libpython3.9.so.1.0
+
    patchelf --set-interpreter ${GLIBC_SO}/lib64/ld-linux-x86-64.so.2 \$VMIS_TEMP/install/vmware-installer/vmis-launcher
-   patchelf --replace-needed libpython3.9.so.1.0 ${PYTHON_SO}/lib/libpython3.9.so.1.0 \$VMIS_TEMP/install/vmware-installer/vmis-launcher
+   #patchelf --replace-needed libpython3.9.so.1.0 ${PYTHON_SO}/lib/libpython3.9.so.1.0 \$VMIS_TEMP/install/vmware-installer/vmis-launcher
+   patchelf --replace-needed libpython3.9.so.1.0 \${PYTHON_SO1} \$VMIS_TEMP/install/vmware-installer/vmis-launcher 
+
    ldd \$VMIS_TEMP/install/vmware-installer/vmis-launcher
    PYSO=\$VMIS_TEMP/install/vmware-installer/
-   PYTHON_SO1=\$VMIS_TEMP/install/vmware-installer/python/libpython3.9.so.1.0
    for so in \$(find \$PYSO -iname "*.so*"); do
       if [ -n "\$(file \$so | grep -i elf)" ]; then
           echo "Patch \$so"
@@ -31,7 +34,8 @@ cat >> launcher_patched.sh <<- EOM
           patchelf --replace-needed libz.so.1 ${ZLIB_SO}/lib/libz.so.1  \$so
           patchelf --replace-needed libbz2.so.1.0 ${BZIP_SO}/lib/libbz2.so.1  \$so
           patchelf --replace-needed liblzma.so.5 ${LZMA_SO}/lib/liblzma.so.5 \$so
-          patchelf --replace-needed libpython3.9.so.1.0 \${PYTHON_SO1}/lib/libpython3.9.so.1.0  \$so
+          patchelf --replace-needed libpython3.9.so.1.0 \${PYTHON_SO1} \$so
+          #patchelf --replace-needed libpython3.9.so.1.0 ${PYTHON_SO}/lib/libpython3.9.so.1.0 \$so
           ldd \$so
       fi
    done
