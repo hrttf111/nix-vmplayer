@@ -46,7 +46,7 @@ rm not_found
 for bin in $bins; do
     ulibs=$(ldd $bin 2> /dev/null | grep -i "not found" | sort | uniq | awk -s '{ print $1; }' | grep -v "\/")
     for ulib in $ulibs; do
-        p=$(cat patches | grep "$ulib")
+        p=$(cat patches | grep "$ulib" | head -n 1)
         if [ -n "$p" ]; then
             echo "$p $bin" >> bin_patches
         else
