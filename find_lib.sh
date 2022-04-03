@@ -37,6 +37,8 @@ for bin in $bins; do
         p=$(cat patches | grep "$ulib")
         if [ -n "$p" ]; then
             echo "$p $bin" >> bin_patches
+        else
+            echo "Cannot find \"$ulib\" for \"$bin\""
         fi
     done
 done
