@@ -185,7 +185,7 @@
         cp -r \
           $bundleSource/vmware-player/lib/* \
           $bundleSource/vmware-player-app/lib/* \
-          $bundleSource/vmware-vmx/lib/* \
+          $bundleSource/vmware-vmx/{lib/*,roms} \
           $bundleSource/vmware-usbarbitrator/bin \
           $bundleSource/vmware-network-editor/lib \
           "$pkgdir/usr/lib/vmware"
@@ -309,12 +309,6 @@
           patchelf --replace-needed libXtst.so.6 ${pkgs.xorg.libXtst}/lib/libXtst.so.6 $elf
         }
 
-#        for elf in $(find $pkgdir -iname "*.so*"); do
-#          if [ -n "$(${pkgs.file}/bin/file $lib | grep -i elf)" ]; then
-#            echo "Show final LDD $elf"
-#            ldd $elf
-#          fi
-#        done
         for filename in $(cat execs); do
           if [ -n "$(${pkgs.file}/bin/file $filename | grep -i elf)" ]; then
             patchelf --set-interpreter $GLIBC_SO/lib64/ld-linux-x86-64.so.2 $filename
@@ -334,7 +328,7 @@
     vmware-config = pkgs.stdenv.mkDerivation rec {
       name = "vmware-config";
       version = "0.1";
-      buildInputs = with pkgs; [ vmware-vmx vmware-kernel ];
+      buildInputs = with pkgs; [ vmware-vmx vmware-kernel vmware-bundle ];
 
       src = ./.;
 
@@ -363,6 +357,8 @@
         chmod +x $out/bin/copy_pref
         echo "modprobe vmw_vmci; insmod ${vmware-kernel}/lib/modules/${kernel.modDirVersion}/kernel/vmmon.ko" > $out/bin/ins_mods
         chmod +x $out/bin/ins_mods
+        #lib.getLib pcsclite
+        ln -s ${vmware-vmx}/usr/lib/vmware/icu $out/etc/vmware/icu
       '';
     };
 
@@ -373,12 +369,14 @@
         vmware-config
         vmware-vmx
         vmware-kernel
+        #libaio
       ];
 
       profile = ''
         export VMWARE_VMX=${vmware-vmx}
         export VMWARE_CONFIG=${vmware-config}
         export VMWARE_KERNEL=${vmware-kernel}
+        export VMWARE_BUNDLE=${vmware-bundle}
       '';
 
       extraBuildCommands = ''
