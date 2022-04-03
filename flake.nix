@@ -9,44 +9,51 @@
   let
     pkgs = nixpkgs.legacyPackages.x86_64-linux.pkgs;
     kernel = nixpkgs.legacyPackages.x86_64-linux.pkgs.linux_5_15;
-    nname = "VMware-Player-12.5.9-7535481.x86_64.bundle";
+    #nname = "VMware-Player-12.5.9-7535481.x86_64.bundle";
+    nname = "VMware-Player-Full-16.2.3-19376536.x86_64.bundle";
 
     my-python-packages = python-packages: with python-packages; [
-      "binascii"
+      "binascii" "zlib"
     ];
     python-with-my-packages = pkgs.python3.withPackages my-python-packages;
     vmware-bundle = pkgs.stdenv.mkDerivation rec {
       name = "vmware-player-bundle";
-      version = "12.5.9";
+      version = "16.2.3";
       src = ./.;
       bundle = pkgs.fetchurl {
         #url = "https://download3.vmware.com/software/player/file/VMware-Player-14.1.7-12989993.x86_64.bundle";
         #url = "https://download3.vmware.com/software/player/file/VMware-Player-12.5.9-7535481.x86_64.bundle";
-        url = "http://127.0.0.1/public/VMware-Player-12.5.9-7535481.x86_64.bundle";
-        sha256 = "2a967fe042c87b7a774ba1d5a7d63ee64f34b5220bf286370ca3439fed60487a";
+        #url = "http://127.0.0.1/public/VMware-Player-12.5.9-7535481.x86_64.bundle";
+        url = "http://127.0.0.1/public/VMware-Player-Full-16.2.3-19376536.x86_64.bundle";
+        #sha256 = "2a967fe042c87b7a774ba1d5a7d63ee64f34b5220bf286370ca3439fed60487a";
+        sha256 = "2c320084765b7a4cd79b6a0e834a6d315c4ecd61d0cc053aa7a445a7958738b0";
       };
 
-      buildInputs = with pkgs; [ bash ncurses5 python3 python27 sqlite patchelf zlib python-with-my-packages hexedit ];
+      buildInputs = with pkgs; [ bash ncurses6 readline63 python39 xz bzip2 sqlite patchelf zlib python-with-my-packages hexedit file ];
       patchedBundle = "${nname}.patched";
 
       configurePhase = ''
       '';
 
       buildPhase = ''
-        export PYTHON_SO=${pkgs.python27}
-        export NCURSES_SO=${pkgs.ncurses5}
+        set -x
+        export PYTHON_SO=${pkgs.python39}
+        export NCURSES_SO=${pkgs.ncurses6}
+        export READLINE_SO=${pkgs.readline63}
         export SQLITE_SO=${pkgs.sqlite.out}
+        export BZIP_SO=${pkgs.bzip2.out}
+        export LZMA_SO=${pkgs.xz.out}
         export ZLIB_SO=${pkgs.zlib}
         export GLIBC_SO=${pkgs.glibc}
         export BASH_SH="${pkgs.bash}/bin/bash"
 
         ls -lah ${bundle}
         ls -lah ./
-        
+
         python3 $src/bundle.py ${bundle} ./${patchedBundle} > result
         chmod +x ./${patchedBundle}
         echo "Patch done"
-        ./${patchedBundle} -x res
+        VMIS_KEEP_TEMP=1 ./${patchedBundle} -x res
         echo "Done"
       '';
 
@@ -59,6 +66,20 @@
         cp ./launcher_patched.sh $out/
         cp ./result $out/
         cp -r res/* $out/
+      '';
+
+      shellHook = ''
+        export PYTHON_SO=${pkgs.python39}
+        export NCURSES_SO=${pkgs.ncurses6}
+        export READLINE_SO=${pkgs.readline63}
+        export SQLITE_SO=${pkgs.sqlite.out}
+        export BZIP_SO=${pkgs.bzip2.out}
+        export LZMA_SO=${pkgs.xz.out}
+        export ZLIB_SO=${pkgs.zlib}
+        export GLIBC_SO=${pkgs.glibc}
+        export BASH_SH="${pkgs.bash}/bin/bash"
+        export BUNDLE=${bundle}
+        echo ${python-with-my-packages}
       '';
     };
 
@@ -135,7 +156,7 @@
 
         mkdir $out
         pkgdir=$out
-        #vmware_installer_version=12.5.9
+        #vmware_installer_version=16.2.3
         mkdir -p \
           "$pkgdir/etc"/{cups,pam.d,modprobe.d,thnuclnt,vmware} \
           "$pkgdir/usr"/{share,bin} \
@@ -457,8 +478,9 @@
   {
     #inherit vmware-player;
     overlay = final: prev: {
-      vmware-player = vmware-player-fhs;
+      #vmware-player = vmware-player-fhs;
+      vmware-player = vmware-bundle;
     };
-    defaultPackage.x86_64-linux = vmware-player-fhs;
+    defaultPackage.x86_64-linux = vmware-bundle;
   };
 }
