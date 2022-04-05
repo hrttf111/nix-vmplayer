@@ -10,6 +10,7 @@ pkgs.stdenv.mkDerivation {
 
     patchelf
     file
+    rsync
     python3
     python27 
     ncurses5
@@ -32,10 +33,7 @@ pkgs.stdenv.mkDerivation {
   installPhase = ''
     mkdir $out
 
-    cp -r ${vmware-bundle} ./bundle
-    bundleSource=./bundle
-
-    ./install.sh $bundleSource $out $src
+    ./install.sh "${vmware-bundle}" $out $src
 
     echo "patchelf --replace-needed libcups.so.2 ${pkgs.cups.out}/lib/libcups.so.2" > patches
     echo "patchelf --replace-needed libuuid.so.1 ${pkgs.libuuid.lib}/lib/libuuid.so.1" >> patches

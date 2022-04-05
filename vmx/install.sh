@@ -4,6 +4,9 @@ extraConfig=$3
 
 vmware_installer_version=$(cat "${bundleSource}/vmware-installer/manifest.xml" | grep -oPm1 "(?<=<version>)[^<]+")
 
+_isoimages=(linux linuxPreGlibc25 netware solaris windows winPre2k winPreVista)
+_isovirtualprinterimages=(Linux Windows)
+
 mkdir -p \
   "$pkgdir/etc"/{cups,pam.d,modprobe.d,thnuclnt,vmware} \
   "$pkgdir/usr"/{share,bin} \
@@ -13,19 +16,18 @@ mkdir -p \
   "$pkgdir/var/lib/vmware/Shared VMs"
 
 chmod +w -R $pkgdir/*
-chmod +w -R $bundleSource
 
-cp -r \
+rsync --chmod=+w -r \
   $bundleSource/vmware-player/share/* \
   $bundleSource/vmware-player-app/share/* \
   "$pkgdir/usr/share"
 
-cp -r \
+rsync --chmod=+w -r \
   $bundleSource/vmware-vmx/{,s}bin/* \
   $bundleSource/vmware-player-app/bin/* \
   "$pkgdir/usr/bin"
 
-cp -r \
+rsync --chmod=+w -r \
   $bundleSource/vmware-player/lib/* \
   $bundleSource/vmware-player-app/lib/* \
   $bundleSource/vmware-vmx/{lib/*,roms} \
@@ -33,33 +35,45 @@ cp -r \
   $bundleSource/vmware-network-editor/lib \
   "$pkgdir/usr/lib/vmware"
 
-cp -r \
+rsync --chmod=+w -r \
   $bundleSource/vmware-player-setup/vmware-config \
   "$pkgdir/usr/lib/vmware/setup"
 
-cp -r \
+rsync --chmod=+w -r \
   $bundleSource/vmware-ovftool/* \
   "$pkgdir/usr/lib/vmware-ovftool"
 
-cp -r \
+rsync --chmod=+w -r \
   $bundleSource/vmware-installer/{python,sopython,vmis,vmis-launcher,vmware-installer,vmware-installer.py} \
   "$pkgdir/usr/lib/vmware-installer/$vmware_installer_version"
 
-cp -r \
+rsync --chmod=+w -r \
   $bundleSource/vmware-player-app/etc/cups/* \
   "$pkgdir/etc/cups"
 
-cp -r \
+rsync --chmod=+w -r \
   $bundleSource/vmware-player-app/extras/thnucups \
   "$pkgdir/usr/lib/cups/filter"
 
-#install -Dm 644 "$bundleSource/vmware-player-app/doc/LearnMore.txt" "$pkgdir/usr/share/licenses/$pkgname/Privacy.txt"
-install -Dm 644 "$pkgdir/usr/lib/vmware-ovftool/vmware.eula" "$pkgdir/usr/share/licenses/$pkgname/VMware OVF Tool - EULA.txt"
-rm "$pkgdir/usr/lib/vmware-ovftool"/{vmware.eula,vmware-eula.rtf,open_source_licenses.txt,manifest.xml}
+for isoimage in ${_isoimages[@]}
+do
+  install -Dm 644 "vmware-tools-$isoimage/$isoimage.iso" "$pkgdir/usr/lib/vmware/isoimages/$isoimage.iso"
+done
+
+for isoimage in ${_isovirtualprinterimages[@]}
+do
+  install -Dm 644 "vmware-virtual-printer/VirtualPrinter-$isoimage.iso" "$pkgdir/usr/lib/vmware/isoimages/VirtualPrinter-$isoimage.iso"
+done
+
+install -Dm 644 "$bundleSource/vmware-player/doc/EULA" "$pkgdir/usr/share/doc/vmware-player/EULA"
+install -Dm 644 "$bundleSource/vmware-player/doc/EULA" "$pkgdir/usr/share/licenses/vmware-player/VMware Workstation - EULA.txt"
+install -Dm 644 "$pkgdir/usr/lib/vmware-ovftool/vmware.eula" "$pkgdir/usr/share/licenses/vmware-player/VMware OVF Tool - EULA.txt"
+install -Dm 644 "$bundleSource/vmware-workstation/doc"/open_source_licenses.txt "$pkgdir/usr/share/licenses/vmware-player/VMware Workstation open source license.txt"
+install -Dm 644 "$bundleSource/vmware-workstation/doc"/ovftool_open_source_licenses.txt "$pkgdir/usr/share/licenses/vmware-player/VMware OVF Tool open source license.txt"
+install -Dm 644 "$bundleSource/vmware-vix-core"/open_source_licenses.txt "$pkgdir/usr/share/licenses/vmware-player/VMware VIX open source license.txt"
+rm "$pkgdir/usr/lib/vmware-ovftool"/{vmware-eula.rtf,open_source_licenses.txt,manifest.xml}
 
 install -Dm 644 "$bundleSource/vmware-vmx/etc/modprobe.d/modprobe-vmware-fuse.conf" "$pkgdir/etc/modprobe.d/vmware-fuse.conf"
-
-#install -Dm 644 $bundleSource/vmware-player-app/lib/isoimages/tools-key.pub "$pkgdir/usr/lib/vmware/isoimages/tools-key.pub"
 
 install -Dm 644 $bundleSource/vmware-vmx/extra/modules.xml "$pkgdir"/usr/lib/vmware/modules/modules.xml
 install -Dm 644 $bundleSource/vmware-installer/bootstrap "$pkgdir"/etc/vmware-installer/bootstrap
@@ -74,7 +88,6 @@ chmod +x \
   "$pkgdir/usr/lib/vmware-installer/$vmware_installer_version"/{vmware-installer,vmis-launcher} \
   "$pkgdir/usr/lib/cups/filter"/*
 
-#chmod -R 600 "$pkgdir/etc/vmware/ssl"
 #chmod +s \
 #  "$pkgdir/usr/bin"/{vmware-authd,vmware-mount} \
 #  "$pkgdir/usr/lib/vmware/bin"/{vmware-vmx,vmware-vmx-debug,vmware-vmx-stats}
@@ -98,15 +111,6 @@ do
   ln -s $pkgdir/usr/lib/vmware/bin/appLoader "$pkgdir/usr/lib/vmware/bin/$link"
 done
 
-#        for file in \
-#          pango/pangorc \
-#          pango/pango.modules \
-#          pango/pangox.aliases \
-#          gtk-2.0/gdk-pixbuf.loaders \
-#          gtk-2.0/gtk.immodules
-#        do
-#          sed -i 's,@@LIBCONF_DIR@@,/usr/lib/vmware/libconf,g' "$pkgdir/usr/lib/vmware/libconf/etc/$file"
-#        done
 
 # create symlinks (replicate installer) - misc
 ln -s $pkgdir/lib/vmware/icu $pkgdir/etc/vmware/icu
@@ -120,9 +124,15 @@ echo -n "" > $database_filename
 sqlite3 "$database_filename" "CREATE TABLE settings(key VARCHAR PRIMARY KEY, value VARCHAR NOT NULL, component_name VARCHAR NOT NULL);"
 sqlite3 "$database_filename" "INSERT INTO settings(key,value,component_name) VALUES('db.schemaVersion','2','vmware-installer');"
 sqlite3 "$database_filename" "CREATE TABLE components(id INTEGER PRIMARY KEY, name VARCHAR NOT NULL, version VARCHAR NOT NULL, buildNumber INTEGER NOT NULL, component_core_id INTEGER NOT NULL, longName VARCHAR NOT NULL, description VARCHAR, type INTEGER NOT NULL);"
-for isoimage in linux linuxPreGlibc25 netware solaris windows winPre2k winPreVista; do
+#for isoimage in linux linuxPreGlibc25 netware solaris windows winPre2k winPreVista; do
 #        local iso_version=$(cat vmware-tools-$isoimage/manifest.xml | grep -oPm1 "(?<=<version>)[^<]+")
-  sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES(\"vmware-tools-$isoimage\",\"$iso_version\",\"${version}\",1,\"$isoimage\",\"$isoimage\",1);"
+#  sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES(\"vmware-tools-$isoimage\",\"$iso_version\",\"${version}\",1,\"$isoimage\",\"$isoimage\",1);"
+#done
+
+for isoimage in ${_isoimages[@]}
+do
+  local version=$(cat "$srcdir/extracted/vmware-tools-$isoimage/manifest.xml" | grep -oPm1 "(?<=<version>)[^<]+")
+  sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES(\"vmware-tools-$isoimage\",\"$version\",\"${_pkgver#*_}\",1,\"$isoimage\",\"$isoimage\",1);"
 done
 
 install -m644 $extraConfig/vmware-config-bootstrap "$pkgdir"/etc/vmware/bootstrap
