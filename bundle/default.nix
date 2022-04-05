@@ -45,17 +45,21 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     set -x
-    export PYTHON_SO=${python3}
-    export NCURSES_SO=${ncurses6}
-    export READLINE_SO=${readline63}
-    export SQLITE_SO=${sqlite.out}
-    export BZIP_SO=${bzip2.out}
-    export LZMA_SO=${xz.out}
-    export ZLIB_SO=${zlib}
-    export GLIBC_SO=${glibc}
     export BASH_SH="${bash}/bin/bash"
 
-    python3 $src/bundle.py ${originalBundle} ./${patchedBundle} > result
+    cat >> patches <<- EOM
+    patchelf --replace-needed libncursesw.so.6 ${ncurses6}/lib/libncursesw.so.6  \$so
+    patchelf --replace-needed libreadline.so.6 ${readline63}/lib/libreadline.so.6  \$so
+    patchelf --replace-needed libsqlite3.so.0 ${sqlite.out}/lib/libsqlite3.so.0  \$so
+    patchelf --replace-needed libz.so.1 ${zlib}/lib/libz.so.1  \$so
+    patchelf --replace-needed libbz2.so.1.0 ${bzip2.out}/lib/libbz2.so.1  \$so
+    patchelf --replace-needed liblzma.so.5 ${xz.out}/lib/liblzma.so.5 \$so
+    EOM
+
+    python3 $src/bundle_tool.py --action=extract --bundle=${originalBundle} --launcher=launcher.sh
+    $src/patch_launcher.sh ./launcher.sh "${glibc}" ./patches
+    python3 $src/bundle_tool.py --action=replace --bundle=${originalBundle} --launcher=launcher.sh --new-bundle=${patchedBundle}
+
     chmod +x ./${patchedBundle}
     ./${patchedBundle} -x res
   '';
@@ -66,15 +70,6 @@ stdenv.mkDerivation {
   '';
 
   shellHook = ''
-    export PYTHON_SO=${python3}
-    export NCURSES_SO=${ncurses6}
-    export READLINE_SO=${readline63}
-    export SQLITE_SO=${sqlite.out}
-    export BZIP_SO=${bzip2.out}
-    export LZMA_SO=${xz.out}
-    export ZLIB_SO=${zlib}
-    export GLIBC_SO=${glibc}
-    export BASH_SH="${bash}/bin/bash"
     export BUNDLE=${originalBundle}
     echo ${python-with-my-packages}
   '';
