@@ -1,57 +1,75 @@
 { stdenv
 , kernel
 , patch
+, fetchgit
 , gcc
 , gnumake
-
-, vmware-bundle
-, version
 , ...
 }:
+let
+  kversion = "${kernel.modDirVersion}";
+  kinclude = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include/";
+  arch-patches-12 = fetchgit {
+    url = "https://aur.archlinux.org/vmware-workstation12.git";
+    rev  = "3bb2d09ad19572648938ea3c12bbe50d1b5051fd";
+    hash = "sha256-QgVHFwjrbpyHWBslhzY2Uwg4ts1cS2QRhrJUdF66B34";
+  };
+  arch-patches-16 = fetchgit {
+    url  = "https://aur.archlinux.org/vmware-workstation.git";
+    rev  = "1a9cfc692141619c665da33bcf9013d2c66e2c99";
+    hash = "sha256-QgVHFwjrbpyHWBslhzY2Uwg4ts1cS2QRhrJUdF66B34";
+  };
+  mkKernel = patches: version: vmware-bundle:
+    stdenv.mkDerivation {
+      pname = "vmware-kernel";
+      inherit version;
+      src = ./.;
 
-stdenv.mkDerivation {
-  pname = "vmware-kernel";
-  inherit version;
-  src = ./.;
+      hardeningDisable = [ "all" ];
+      buildInputs = [
+        gcc
+        gnumake
+        patch
+        vmware-bundle
+        patches
+      ];
+      nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  hardeningDisable = [ "all" ];
-  buildInputs = [
-    gcc
-    gnumake
-    patch
-    vmware-bundle
-  ];
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+      makeFlags = [
+        "KVERSION=${kversion}"
+        "LINUXINCLUDE=${kinclude}"
+        "VM_KBUILD=yes"
+      ];
 
-  makeFlags = [
-    "KVERSION=${kernel.modDirVersion}"
-    "LINUXINCLUDE=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include/"
-    "VM_KBUILD=yes"
-  ];
-  #patches = [ ./vmmon.patch ];
+      buildPhase = ''
+        tar xf "${vmware-bundle}/vmware-vmx/lib/modules/source/vmmon.tar"
+        cp -r ./vmmon-only ./vmmon
+        tar xf "${vmware-bundle}/vmware-vmx/lib/modules/source/vmnet.tar"
+        cp -r ./vmnet-only ./vmnet
+        ${patch}/bin/patch -p1 < ${patches}/vmmon.patch
+        ${patch}/bin/patch -p1 < ${patches}/vmnet.patch
+        export KVERSION=${kversion}
+        export LINUXINCLUDE=${kinclude}
+        export VM_KBUILD=yes
+        make -C ./vmmon
+        make -C ./vmnet
+      '';
 
-  unpackPhase = ''
-  '';
+      installPhase = ''
+        binDir="$out/lib/modules/${kversion}/kernel/"
+        mkdir -p $binDir
+        cp ./vmmon/*.ko $binDir
+        cp ./vmnet/*.ko $binDir
+      '';
 
-  buildPhase = ''
-    tar xf "${vmware-bundle}/vmware-vmx/lib/modules/source/vmmon.tar"
-    cp -r ./vmmon-only ./vmmon
-    ${patch}/bin/patch -p1 < $src/vmmon.patch
-    export KVERSION=${kernel.modDirVersion}
-    export LINUXINCLUDE=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include/
-    export VM_KBUILD=yes
-    make -C ./vmmon
-  '';
-
-  installPhase = ''
-    binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/"
-    mkdir -p $binDir
-    cp ./vmmon/*.ko $binDir
-  '';
-
-  shellHook = ''
-    export KVERSION=${kernel.modDirVersion}
-    export LINUXINCLUDE=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build/include/
-    export VM_KBUILD=yes
-  '';
+      shellHook = ''
+        export KVERSION=${kversion}
+        export LINUXINCLUDE=${kinclude}
+        export VM_KBUILD=yes
+      '';
+    };
+in
+{
+  mkKernel12 = mkKernel arch-patches-12;
+  mkKernel16 = mkKernel arch-patches-16;
 }
