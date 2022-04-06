@@ -26,15 +26,13 @@
     vmware-bundle-12 = mkBundles.mkBundle12 version12 bundle12;
     vmware-bundle-16 = mkBundles.mkBundle16 version16 bundle16;
 
-    #mkVmxs = import ./vmx pkgs;
     mkVmxs = import ./vmx { inherit pkgs; };
     vmware-vmx-16 = mkVmxs.mkVmx16 version16 vmware-bundle-16;
     vmware-vmx-12 = mkVmxs.mkVmx12 version12 vmware-bundle-12;
 
-    mkKernels = import ./kernel (pkgs // { inherit kernel; });
+    mkKernels = import ./vmware-kernel.nix (pkgs // { inherit kernel; });
     vmware-kernel-12 = mkKernels.mkKernel12 version12 vmware-bundle-12;
     vmware-kernel-16 = mkKernels.mkKernel16 version16 vmware-bundle-16;
-
 
     vmware-config-12 = import ./vmware-config.nix {
       stdenv = pkgs.stdenv;
@@ -52,55 +50,32 @@
       version = version16;
     };
 
-    vmware-player-fhs12 = pkgs.buildFHSUserEnv {
-      name = "vmware-player-fhs";
+    buildFHS = version: vmware-config: vmware-vmx: vmware-kernel:
+      pkgs.buildFHSUserEnv {
+        name = "vmware-player-fhs-${version}";
 
-      targetPkgs = pkgs: with self.pkgs; [
-        vmware-config-12
-        vmware-vmx-12
-        vmware-kernel-12
-      ];
+        targetPkgs = pkgs: with self.pkgs; [
+          vmware-config
+          vmware-vmx
+          vmware-kernel
+        ];
 
-      profile = ''
-        export VMWARE_VMX=${vmware-vmx-12}
-        export VMWARE_CONFIG=${vmware-config-12}
-        export VMWARE_KERNEL=${vmware-kernel-12}
-        export VMWARE_BUNDLE=${vmware-bundle-12}
-      '';
+        profile = ''
+          export VMWARE_VMX=${vmware-vmx}
+          export VMWARE_CONFIG=${vmware-config}
+          export VMWARE_KERNEL=${vmware-kernel}
+        '';
 
-      extraBuildCommands = ''
-      '';
+        extraBuildCommands = ''
+        '';
 
-      extraInstallCommands = ''
-      '';
+        extraInstallCommands = ''
+        '';
 
-      runScript = "bash -l";
-    };
-
-    vmware-player-fhs = pkgs.buildFHSUserEnv {
-      name = "vmware-player-fhs";
-
-      targetPkgs = pkgs: with self.pkgs; [
-        vmware-config-16
-        vmware-vmx-16
-        vmware-kernel-16
-      ];
-
-      profile = ''
-        export VMWARE_VMX=${vmware-vmx-16}
-        export VMWARE_CONFIG=${vmware-config-16}
-        export VMWARE_KERNEL=${vmware-kernel-16}
-        export VMWARE_BUNDLE=${vmware-bundle-16}
-      '';
-
-      extraBuildCommands = ''
-      '';
-
-      extraInstallCommands = ''
-      '';
-
-      runScript = "bash -l";
-    };
+        runScript = "bash -l";
+      };
+    vmware-player-fhs12 = buildFHS version12 vmware-config-12 vmware-vmx-12 vmware-kernel-12;
+    vmware-player-fhs16 = buildFHS version16 vmware-config-16 vmware-vmx-16 vmware-kernel-16;
   in
   {
     inherit vmware-bundle-16;
@@ -109,11 +84,12 @@
     inherit vmware-vmx-12;
     inherit vmware-kernel-16;
     inherit vmware-kernel-12;
-    inherit vmware-player-fhs;
+    inherit vmware-player-fhs16;
     inherit vmware-player-fhs12;
 
     overlay = final: prev: {
-      vmware-player = vmware-player-fhs;
+      vmware-player-12 = vmware-player-fhs12;
+      vmware-player-16 = vmware-player-fhs16;
       inherit vmware-bundle-16;
       inherit vmware-bundle-12;
       inherit vmware-vmx-16;
@@ -121,6 +97,6 @@
       inherit vmware-kernel-16;
       inherit vmware-kernel-12;
     };
-    defaultPackage.x86_64-linux = vmware-player-fhs;
+    defaultPackage.x86_64-linux = vmware-player-fhs16;
   };
 }
