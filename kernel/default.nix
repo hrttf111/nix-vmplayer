@@ -12,7 +12,7 @@ let
   arch-patches-12 = fetchgit {
     url = "https://aur.archlinux.org/vmware-workstation12.git";
     rev  = "3bb2d09ad19572648938ea3c12bbe50d1b5051fd";
-    hash = "sha256-QgVHFwjrbpyHWBslhzY2Uwg4ts1cS2QRhrJUdF66B34";
+    hash = "sha256-hMY80rU8PZs3YPtGhTs0bmSq7u0oyzKkXP0X9eaAbMY";
   };
   arch-patches-16 = fetchgit {
     url  = "https://aur.archlinux.org/vmware-workstation.git";

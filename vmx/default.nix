@@ -81,7 +81,7 @@ let
           cp not_found $out/usr/share/nix_debug/not_found
           cp execs $out/usr/share/nix_debug/execs
         '' else '''');
-    }
+    };
 in
 {
   mkVmx12 = mkVmx configurePhase12;
