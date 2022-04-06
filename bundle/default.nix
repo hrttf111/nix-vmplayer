@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     python-with-my-packages
   ];
 
-  buildPhase = ''
+  configurePhase = ''
     cat >> patches <<- EOM
     patchelf --replace-needed libncursesw.so.6 ${ncurses6}/lib/libncursesw.so.6  \$so
     patchelf --replace-needed libreadline.so.6 ${readline63}/lib/libreadline.so.6  \$so
@@ -53,7 +53,9 @@ stdenv.mkDerivation {
     patchelf --replace-needed liblzma.so.5 ${xz.out}/lib/liblzma.so.5 \$so
     patchelf --replace-needed libpython3.9.so.1.0 \$VMIS_TEMP/install/vmware-installer/python/libpython3.9.so.1.0 \$so
     EOM
+  '';
 
+  buildPhase = ''
     python3 $src/bundle_tool.py --action=extract --bundle=${originalBundle} --launcher=launcher.sh
     $src/patch_launcher.sh ./launcher.sh "${glibc}" ./patches
     python3 $src/bundle_tool.py --action=replace --bundle=${originalBundle} --launcher=launcher.sh --new-bundle=${patchedBundle}
