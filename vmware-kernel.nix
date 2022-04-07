@@ -31,8 +31,8 @@ version: patches: vmware-bundle:
     nativeBuildInputs = kernel.moduleBuildDependencies;
 
     patchPhase = ''
-      mv ./vmmon-only ./vmmon
-      mv ./vmnet-only ./vmnet
+      cp -r ./vmmon-only ./vmmon
+      cp -r ./vmnet-only ./vmnet
       ${patch}/bin/patch -p1 < ${patches}/vmmon.patch
       ${patch}/bin/patch -p1 < ${patches}/vmnet.patch
     '';
