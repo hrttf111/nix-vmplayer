@@ -138,3 +138,21 @@ done
 install -m644 $extraConfig/vmware-config-bootstrap "$pkgdir"/etc/vmware/bootstrap
 install -Dm 644 $extraConfig/vmware-config "$pkgdir"/etc/vmware/config
 install -Dm 644 $bundleSource/vmware-installer/bootstrap "$pkgdir"/etc/vmware-installer/bootstrap
+
+if [ -d $bundleSource/vmware-vmx/lib/libconf/etc/gtk-2.0 ]; then
+    mkdir -p "$pkgdir"/etc/gtk-2.0
+    install -Dm 644 $bundleSource/vmware-vmx/lib/libconf/etc/gtk-2.0/* "$pkgdir"/etc/gtk-2.0
+    LIBCONF_DIR=$pkgdir/usr/lib/vmware/libconf
+    sed -i "s,@@LIBCONF_DIR@@,$LIBCONF_DIR," "$pkgdir/etc/gtk-2.0/gdk-pixbuf.loaders"
+    sed -i "s,@@LIBCONF_DIR@@,$LIBCONF_DIR," "$pkgdir/etc/gtk-2.0/gtk.immodules"
+fi
+
+if [ -d $bundleSource/vmware-vmx/lib/libconf/etc/pango ]; then
+    mkdir -p "$pkgdir"/etc/pango/pango
+    LIBCONF_DIR=$pkgdir/usr/lib/vmware/libconf
+    install -Dm 644 $bundleSource/vmware-vmx/lib/libconf/etc/pango/pangorc "$pkgdir"/etc/pango
+    install -Dm 644 $bundleSource/vmware-vmx/lib/libconf/etc/pango/pango.modules $pkgdir/etc/pango/
+    install -Dm 644 $bundleSource/vmware-vmx/lib/libconf/etc/pango/pangox.aliases $pkgdir/etc/pango/pango
+    sed -i "s,@@LIBCONF_DIR@@,$LIBCONF_DIR," "$pkgdir/etc/pango/pango.modules"
+    sed -i "s,@@LIBCONF_DIR@@,," "$pkgdir/etc/pango/pangorc"
+fi
