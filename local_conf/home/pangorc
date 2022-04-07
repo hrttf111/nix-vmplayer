@@ -1,5 +1,0 @@
-[Pango]
-ModuleFiles = /etc/pango.modules
-
-[PangoX]
-AliasFiles = /etc/pangox.aliases
