@@ -57,20 +57,20 @@ rsync --chmod=+w -r \
 
 for isoimage in ${_isoimages[@]}
 do
-  install -Dm 644 "vmware-tools-$isoimage/$isoimage.iso" "$pkgdir/usr/lib/vmware/isoimages/$isoimage.iso"
+  install -Dm 644 "$bundleSource/vmware-tools-$isoimage/$isoimage.iso" "$pkgdir/usr/lib/vmware/isoimages/$isoimage.iso"
 done
 
 for isoimage in ${_isovirtualprinterimages[@]}
 do
-  install -Dm 644 "vmware-virtual-printer/VirtualPrinter-$isoimage.iso" "$pkgdir/usr/lib/vmware/isoimages/VirtualPrinter-$isoimage.iso"
+  install -Dm 644 "$bundleSource/vmware-virtual-printer/VirtualPrinter-$isoimage.iso" "$pkgdir/usr/lib/vmware/isoimages/VirtualPrinter-$isoimage.iso"
 done
 
 install -Dm 644 "$bundleSource/vmware-player/doc/EULA" "$pkgdir/usr/share/doc/vmware-player/EULA"
 install -Dm 644 "$bundleSource/vmware-player/doc/EULA" "$pkgdir/usr/share/licenses/vmware-player/VMware Workstation - EULA.txt"
 install -Dm 644 "$pkgdir/usr/lib/vmware-ovftool/vmware.eula" "$pkgdir/usr/share/licenses/vmware-player/VMware OVF Tool - EULA.txt"
-install -Dm 644 "$bundleSource/vmware-workstation/doc"/open_source_licenses.txt "$pkgdir/usr/share/licenses/vmware-player/VMware Workstation open source license.txt"
-install -Dm 644 "$bundleSource/vmware-workstation/doc"/ovftool_open_source_licenses.txt "$pkgdir/usr/share/licenses/vmware-player/VMware OVF Tool open source license.txt"
-install -Dm 644 "$bundleSource/vmware-vix-core"/open_source_licenses.txt "$pkgdir/usr/share/licenses/vmware-player/VMware VIX open source license.txt"
+install -Dm 644 "$bundleSource/vmware-player-app/doc"/open_source_licenses.txt "$pkgdir/usr/share/licenses/vmware-player/VMware Workstation open source license.txt"
+install -Dm 644 "$bundleSource/vmware-player-app/doc"/ovftool_open_source_licenses.txt "$pkgdir/usr/share/licenses/vmware-player/VMware OVF Tool open source license.txt"
+#install -Dm 644 "$bundleSource/vmware-vix-core"/open_source_licenses.txt "$pkgdir/usr/share/licenses/vmware-player/VMware VIX open source license.txt"
 rm "$pkgdir/usr/lib/vmware-ovftool"/{vmware-eula.rtf,open_source_licenses.txt,manifest.xml}
 
 install -Dm 644 "$bundleSource/vmware-vmx/etc/modprobe.d/modprobe-vmware-fuse.conf" "$pkgdir/etc/modprobe.d/vmware-fuse.conf"
@@ -131,10 +131,10 @@ sqlite3 "$database_filename" "CREATE TABLE components(id INTEGER PRIMARY KEY, na
 
 for isoimage in ${_isoimages[@]}
 do
-  local version=$(cat "$srcdir/extracted/vmware-tools-$isoimage/manifest.xml" | grep -oPm1 "(?<=<version>)[^<]+")
-  sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES(\"vmware-tools-$isoimage\",\"$version\",\"${_pkgver#*_}\",1,\"$isoimage\",\"$isoimage\",1);"
+  version=$(cat "$bundleSource/vmware-tools-$isoimage/manifest.xml" | grep -oPm1 "(?<=<version>)[^<]+")
+  sqlite3 "$database_filename" "INSERT INTO components(name,version,buildNumber,component_core_id,longName,description,type) VALUES(\"vmware-tools-$isoimage\",\"$version\",\"${vmware_installer_version#*_}\",1,\"$isoimage\",\"$isoimage\",1);"
 done
 
 install -m644 $extraConfig/vmware-config-bootstrap "$pkgdir"/etc/vmware/bootstrap
 install -Dm 644 $extraConfig/vmware-config "$pkgdir"/etc/vmware/config
-#install -Dm 644 vmware-installer/bootstrap "$pkgdir"/etc/vmware-installer/bootstrap
+install -Dm 644 $bundleSource/vmware-installer/bootstrap "$pkgdir"/etc/vmware-installer/bootstrap
