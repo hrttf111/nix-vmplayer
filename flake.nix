@@ -27,7 +27,6 @@
       };
       fhs = pkgs.buildFHSUserEnv {
         name = "vmware-player-fhs-${version}";
-
         targetPkgs = pkgs: with self.pkgs; [
           vmware-config
           vmware-vmx
@@ -37,10 +36,6 @@
           export VMWARE_VMX=${vmware-vmx}
           export VMWARE_CONFIG=${vmware-config}
           export VMWARE_KERNEL=${vmware-kernel}
-        '';
-        extraBuildCommands = ''
-        '';
-        extraInstallCommands = ''
         '';
         runScript = "bash -l";
       };
