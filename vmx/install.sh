@@ -139,6 +139,9 @@ install -m644 $extraConfig/vmware-config-bootstrap "$pkgdir"/etc/vmware/bootstra
 install -Dm 644 $extraConfig/vmware-config "$pkgdir"/etc/vmware/config
 install -Dm 644 $bundleSource/vmware-installer/bootstrap "$pkgdir"/etc/vmware-installer/bootstrap
 
+sed -i "s,@@VMWARE_DIR@@,$pkgdir," "$pkgdir/etc/vmware/bootstrap"
+sed -i "s,@@VMWARE_DIR@@,$pkgdir," "$pkgdir/etc/vmware/config"
+
 if [ -d $bundleSource/vmware-vmx/lib/libconf/etc/gtk-2.0 ]; then
     mkdir -p "$pkgdir"/etc/gtk-2.0
     install -Dm 644 $bundleSource/vmware-vmx/lib/libconf/etc/gtk-2.0/* "$pkgdir"/etc/gtk-2.0
