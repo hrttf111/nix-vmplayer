@@ -13,7 +13,6 @@ stdenv.mkDerivation {
     ln -s ${vmware-vmx}/usr/lib/vmware/bin/vmplayer $out/bin/vmplayer
 
     mkdir $out/etc/vmware
-    cp $src/local_conf/home/vmware/preferences $out/etc/vmware/preferences
     echo 'mkdir ~/.vmware; cp /etc/vmware/preferences ~/.vmware/' > $out/bin/copy_pref
     chmod +x $out/bin/copy_pref
     echo "modprobe vmw_vmci; insmod ${vmware-kernel}/lib/modules/${kernel.modDirVersion}/kernel/vmmon.ko" > $out/bin/ins_mods

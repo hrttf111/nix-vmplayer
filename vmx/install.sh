@@ -137,6 +137,7 @@ done
 
 install -m644 $extraConfig/vmware-config-bootstrap "$pkgdir"/etc/vmware/bootstrap
 install -Dm 644 $extraConfig/vmware-config "$pkgdir"/etc/vmware/config
+install -Dm 644 $extraConfig/preferences "$pkgdir"/etc/vmware/preferences
 install -Dm 644 $bundleSource/vmware-installer/bootstrap "$pkgdir"/etc/vmware-installer/bootstrap
 
 sed -i "s,@@VMWARE_DIR@@,$pkgdir," "$pkgdir/etc/vmware/bootstrap"
