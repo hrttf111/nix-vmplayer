@@ -19,6 +19,14 @@ let
     EOM
   '';
 
+  configurePhase14 = ''
+    cat >> patches <<- EOM
+    patchelf --replace-needed libpython2.7.so.1.0 ${pkgs.python27}/lib/libpython2.7.so.1.0 $elf
+    patchelf --replace-needed libcups.so.2 ${pkgs.cups.out}/lib/libcups.so.2
+    patchelf --replace-needed libuuid.so.1 ${pkgs.libuuid.lib}/lib/libuuid.so.1
+    EOM
+  '';
+
   configurePhase16 = ''
     cat >> patches <<- EOM
     patchelf --replace-needed libcups.so.2 ${pkgs.cups.out}/lib/libcups.so.2
@@ -85,5 +93,6 @@ let
 in
 {
   mkVmx12 = mkVmx configurePhase12;
+  mkVmx14 = mkVmx configurePhase14;
   mkVmx16 = mkVmx configurePhase16;
 }

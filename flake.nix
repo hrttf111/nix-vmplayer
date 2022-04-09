@@ -56,6 +56,21 @@
       mkVmx = mkVmxs.mkVmx12;
     };
 
+    vmware-player-14 = mkVmwarePlayer {
+      version = "14.1.7";
+      bundle = pkgs.fetchurl {
+        url = "http://127.0.0.1/VMware-Player-14.1.7-12989993.x86_64.bundle";
+        sha256 = "f595e14af39848936cfc4105140c488bce1e47ec950b3f61ea888b3fdca24b71";
+      };
+      kernelPatches = pkgs.fetchgit {
+        url = "https://aur.archlinux.org/vmware-workstation14.git";
+        rev  = "70e5ad79c923c691cb607c575f9d1cc6681b2466";
+        hash = "sha256-mqo4YvF91um/1i34aejBvBOTUioSiMUfycmydyFedRs";
+      };
+      mkBundle = mkBundles.mkBundle12;
+      mkVmx = mkVmxs.mkVmx14;
+    };
+
     vmware-player-16 = mkVmwarePlayer {
       version = "16.2.3";
       bundle = pkgs.fetchurl {
@@ -73,6 +88,7 @@
   in
   {
     inherit vmware-player-12;
+    inherit vmware-player-14;
     inherit vmware-player-16;
 
     overlay = final: prev: {
