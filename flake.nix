@@ -44,7 +44,7 @@
     vmware-player-12 = mkVmwarePlayer {
       version = "12.5.9";
       bundle = pkgs.fetchurl {
-        url = "http://127.0.0.1/public/VMware-Player-12.5.9-7535481.x86_64.bundle";
+        url = "http://127.0.0.1/VMware-Player-12.5.9-7535481.x86_64.bundle";
         sha256 = "2a967fe042c87b7a774ba1d5a7d63ee64f34b5220bf286370ca3439fed60487a";
       };
       kernelPatches = pkgs.fetchgit {
@@ -59,7 +59,7 @@
     vmware-player-16 = mkVmwarePlayer {
       version = "16.2.3";
       bundle = pkgs.fetchurl {
-        url = "http://127.0.0.1/public/VMware-Player-Full-16.2.3-19376536.x86_64.bundle";
+        url = "http://127.0.0.1/VMware-Player-Full-16.2.3-19376536.x86_64.bundle";
         sha256 = "2c320084765b7a4cd79b6a0e834a6d315c4ecd61d0cc053aa7a445a7958738b0";
       };
       kernelPatches = pkgs.fetchgit {
