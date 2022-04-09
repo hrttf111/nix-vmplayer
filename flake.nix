@@ -63,12 +63,31 @@
         sha256 = "f595e14af39848936cfc4105140c488bce1e47ec950b3f61ea888b3fdca24b71";
       };
       kernelPatches = pkgs.fetchgit {
-        url = "https://aur.archlinux.org/vmware-workstation14.git";
-        rev  = "70e5ad79c923c691cb607c575f9d1cc6681b2466";
-        hash = "sha256-mqo4YvF91um/1i34aejBvBOTUioSiMUfycmydyFedRs";
+        url  = "https://aur.archlinux.org/vmware-workstation14.git";
+        #rev  = "70e5ad79c923c691cb607c575f9d1cc6681b2466";
+        #hash = "sha256-mqo4YvF91um/1i34aejBvBOTUioSiMUfycmydyFedRs";
+        rev  = "6d8e05cfd19e1149176c802671e9cfc9be853d2a";
+        hash = "sha256-UBbcEyyQcbOet2GxOnofedpcFT1LeiCY8FEhsPdtOqQ=";
       };
       mkBundle = mkBundles.mkBundle12;
       mkVmx = mkVmxs.mkVmx14;
+    };
+
+    vmware-player-15 = mkVmwarePlayer {
+      version = "15.5.7";
+      bundle = pkgs.fetchurl {
+        url = "http://127.0.0.1/VMware-Player-15.5.7-17171714.x86_64.bundle";
+        sha256 = "782d5fd5faf9e775c0d5fe56a829a8fb811c6717b8a924a1eda7f57c43c88370";
+      };
+      kernelPatches = pkgs.fetchgit {
+        url = "https://aur.archlinux.org/vmware-workstation15.git";
+        #rev  = "58259609c60ecd1dd070b4b8a1fe266c99519e88";
+        #hash = "sha256-9ChvVyuubES7t2I0oQI8kicyKAQ54K7q2BthHqr04/g=";
+        rev = "aa31c43e6c3f0722bc7bfa8ecc33c3727a604769";
+        hash = "sha256-ZIhxg7Ji8DZL3X2NLxvlzzC1apkM5btWhHezah87Kz8=";
+      };
+      mkBundle = mkBundles.mkBundle16;
+      mkVmx = mkVmxs.mkVmx16;
     };
 
     vmware-player-16 = mkVmwarePlayer {
@@ -89,6 +108,7 @@
   {
     inherit vmware-player-12;
     inherit vmware-player-14;
+    inherit vmware-player-15;
     inherit vmware-player-16;
 
     overlay = final: prev: {
