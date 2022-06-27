@@ -1,10 +1,7 @@
 { mkDerivation, nginx, gnused }:
 let
   serverConfigTemplate = ''
-#user  nobody;
 worker_processes  1;
-
-#error_log /dev/null;
 
 error_log   @@NGINX_DIR@@/error.log;
 pid         @@NGINX_DIR@@/nginx.pid;
@@ -13,7 +10,6 @@ daemon off;
 events {
     worker_connections  1024;
 }
-
 
 http {
     default_type  application/octet-stream;
@@ -39,11 +35,6 @@ http {
         location / {
             root   @@DATA_DIR@@;
         }
-
-        #error_page   500 502 503 504  /50x.html;
-        #location = /50x.html {
-        #    root   /usr/share/nginx/html;
-        #}
     }
 }
   '';
