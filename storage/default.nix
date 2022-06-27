@@ -52,7 +52,7 @@ in
   mkDerivation {
     pname = "vmplayer-nginx-server";
     version = "1.0";
-    src = ./.;
+    dontUnpack = true;
 
     installPhase = ''
       mkdir -p $out/{bin,share}
