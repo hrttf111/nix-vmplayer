@@ -13,7 +13,6 @@
 , bzip2
 , sqlite
 , zlib
-, ...
 }:
 let
   my-python-packages = python-packages: with python-packages; [
