@@ -1,5 +1,6 @@
 { mkDerivation, nginx, gnused }:
 let
+  port = "8000";
   serverConfigTemplate = ''
 worker_processes  1;
 
@@ -28,8 +29,8 @@ http {
     proxy_store off;
 
     server {
-        listen       8000;
-        listen  [::]:8000;
+        listen       ${port};
+        listen  [::]:${port};
         server_name  localhost;
 
         location / {
