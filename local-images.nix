@@ -16,9 +16,9 @@ http {
     default_type  application/octet-stream;
 
     access_log  /dev/null;
-    error_log /dev/null;
+    error_log   /dev/null;
 
-    sendfile        on;
+    sendfile           on;
     keepalive_timeout  65;
 
     client_body_temp_path @@NGINX_DIR@@;
