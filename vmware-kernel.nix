@@ -3,7 +3,6 @@
 , patch
 , gcc
 , gnumake
-, ...
 }:
 let
   kversion = "${kernel.modDirVersion}";

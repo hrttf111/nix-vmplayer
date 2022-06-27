@@ -1,11 +1,15 @@
-{ stdenv, kernel, vmware-vmx, vmware-kernel, version }:
-
+{ stdenv
+, kernel
+, vmware-vmx
+, vmware-kernel
+, version
+}:
 stdenv.mkDerivation {
   pname = "vmware-config";
   inherit version;
   buildInputs = [ vmware-vmx vmware-kernel ];
 
-  src = ./.;
+  dontUnpack = true;
 
   installPhase = ''
     set -x
