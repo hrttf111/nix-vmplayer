@@ -2,7 +2,7 @@
   description = "VMWare Player";
 
   inputs = {
-    nixpkgs.url = "nixpkgs/nixos-21.11";
+    nixpkgs.url = "nixpkgs/nixos-22.05";
   };
 
   outputs = { self, nixpkgs }:
@@ -104,12 +104,15 @@
       mkBundle = mkBundles.mkBundle16;
       mkVmx = mkVmxs.mkVmx16;
     };
+
+    run-nginx = pkgs.callPackage ./storage { mkDerivation = pkgs.stdenv.mkDerivation; };
   in
   {
     inherit vmware-player-12;
     inherit vmware-player-14;
     inherit vmware-player-15;
     inherit vmware-player-16;
+    inherit run-nginx;
 
     overlay = final: prev: {
       vmware-player-12 = vmware-player-12.fhs;
