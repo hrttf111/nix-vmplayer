@@ -105,7 +105,7 @@
       mkVmx = mkVmxs.mkVmx16;
     };
 
-    run-nginx = pkgs.callPackage ./storage { mkDerivation = pkgs.stdenv.mkDerivation; };
+    run-nginx = pkgs.callPackage ./local-images.nix { mkDerivation = pkgs.stdenv.mkDerivation; };
   in
   {
     inherit vmware-player-12;
