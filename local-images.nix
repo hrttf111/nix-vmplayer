@@ -64,5 +64,6 @@ in
           ${nginx}/bin/nginx -c \$CONFIG
       EOM
       chmod +x $out/bin/run-nginx
+      ln -s $out/bin/run-nginx $out/bin/vmplayer-nginx-server
     '';
   }
