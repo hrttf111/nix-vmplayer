@@ -1,6 +1,7 @@
 data
 fontconfig
 **.swp
+flake.lock
 footer
 launcher*
 xx0*
