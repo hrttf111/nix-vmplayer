@@ -1,7 +1,9 @@
 ### nix-vmplayer
 
 This project contains a set of nix, bash and python scripts which create NIX derivation for VMware Player. It allows to run vmplayer GUI and VMs.
+
 Note: In general these scripts allow to build and run VMware Workstation too, but since I have no licence I could only build it.
+
 The project is not complete, this is just a proof of concept which allows to execute virtual machines in vmplayer. It has many limitations and problems:
  - There is no integration with nixos
  - The application needs to be executed with root privileges
@@ -11,6 +13,7 @@ The project is not complete, this is just a proof of concept which allows to exe
  - Only limited testing was conducted, not all virtualized drivers may be functional
 
 VMware Player versions supported: 12, 14, 15, 16
+
 Note: Take into account that older versions (for example, 12) may not run correctly on modern CPUs.
 
 How to build and run:
